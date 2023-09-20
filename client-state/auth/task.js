@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
   if (userId) {
     welcomeBlock.classList.add("welcome_active");
     userIdSpan.textContent = userId;
+    // Убираем поля логина и пароля из DOM-дерева
+    signinForm.remove();
   }
 
   // Обработчик отправки формы
@@ -30,6 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
           // Отображаем блок приветствия
           welcomeBlock.classList.add("welcome_active");
           userIdSpan.textContent = data.user_id;
+
+          // Убираем поля логина и пароля из DOM-дерева
+          signinForm.remove();
         } else {
           // Если авторизация не удалась, выводим сообщение об ошибке
           alert("Неверный логин/пароль");
