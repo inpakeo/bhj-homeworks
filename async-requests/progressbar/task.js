@@ -14,13 +14,22 @@ form.addEventListener('submit', (e) => {
         }
     };
 
-    xhr.onloadend = function() {
+    xhr.onload = function() {
         if (xhr.status === 200) {
-          console.log("Успех");
+          const response = JSON.parse(xhr.responseText);
+          if (response.success) {
+            console.log("Загрузка успешна: " + response.message);
+          } else {
+            console.log("Ошибка на сервере: " + response.message);
+          }
         } else {
-          console.log("Ошибка " + this.status);
+          console.log("Ошибка " + xhr.status);
         }
     };
 
+    xhr.onerror = function() {
+        console.log("Произошла ошибка при отправке запроса.");
+    };
+
     xhr.send(new FormData(form));
-})
+});
