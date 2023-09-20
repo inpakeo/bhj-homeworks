@@ -1,24 +1,26 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('form');
-  const progress = document.getElementById('progress');
-  
-  form.addEventListener('submit', (e) => {
+const progress = document.getElementById('progress');
+const form = document.getElementById('form');
+
+form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const formData = new FormData(form);
+
     const xhr = new XMLHttpRequest();
-    
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) alert('Файл успешно загружен!');
-        else alert('Ошибка при загрузке файла');
-      }
+    xhr.open('POST', 'https://students.netoservices.ru/nestjs-backend/upload');
+
+    xhr.upload.onprogress = function(event) {
+        if(event.lengthComputable) {
+            const percentComplete = (event.loaded / event.total) * 100;
+            progress.value = percentComplete;
+        }
     };
-    
-    xhr.upload.addEventListener('progress', (e) => {
-      if (e.lengthComputable) progress.value = (e.loaded / e.total) * 100;
-    });
-    
-    xhr.open('POST', 'https://students.netoservices.ru/nestjs-backend/upload', true);
-    xhr.send(formData);
-  });
-});
+
+    xhr.onloadend = function() {
+        if (xhr.status === 200) {
+          console.log("Успех");
+        } else {
+          console.log("Ошибка " + this.status);
+        }
+    };
+
+    xhr.send(new FormData(form));
+})
